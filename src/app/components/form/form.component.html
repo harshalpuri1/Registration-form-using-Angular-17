@@ -1,8 +1,7 @@
-<!-- Show the form if it has not been submitted or if it's invalid -->
-<div *ngIf="!submitted || isFormInvalid" class="border border-dark p-2">
+<div *ngIf="!submitted || isFormInvalid" class="border border-dark p-2 rounded">
     <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
       <div class="row g-0">
-        <div class="col text-center p-2 mb-3 bg-light">
+        <div class="col text-center p-2 mb-3 bg-light rounded">
           <h3>Registration Form</h3>
         </div>
       </div>
@@ -13,6 +12,12 @@
         <div class="col mb-3">
           <label for="name" class="form-label"><b>Full Name</b></label>
           <input type="text" formControlName="name" class="form-control" id="name" placeholder="John Doe">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mb-3">
+          <label for="profileImage" class="form-label"><b>Profile Image</b></label>
+          <input type="file" class="form-control" id="profileImage" (change)="onImageChange($event)">
         </div>
       </div>
       <div class="row">
@@ -35,11 +40,11 @@
             <div class="row">
               <div class="col">
                 <label for="qualification" class="form-label">Education Type</label>
-                <input type="text" formControlName="qualification" class="form-control" placeholder="BSc, MSc, etc.">
+                <input type="text" formControlName="qualification" class="form-control" placeholder="B-Tech, BSc, MSc, etc.">
               </div>
               <div class="col">
                 <label for="passout" class="form-label">Year of Passout</label>
-                <input type="number" formControlName="passout" class="form-control" placeholder="2020">
+                <input type="number" formControlName="passout" class="form-control" placeholder="2024">
               </div>
               <div class="col">
                 <label for="percentage" class="form-label">Percentage or CGPA</label>
@@ -78,6 +83,7 @@
     <div id="resume-content">
       <h2>Resume</h2>
       <br><br>
+      <img *ngIf="profileImage" [src]="profileImage" alt="Profile Image" style="width: 100px; height: 100px;">
       <p><strong>Full Name:</strong> {{ submittedData?.name }}</p>
       <p><strong>Mobile Number:</strong> {{ submittedData?.mobile_no }}</p>
       <p><strong>Email Address:</strong> {{ submittedData?.email }}</p>

@@ -15,6 +15,7 @@ export class FormComponent {
   submitted = false;
   isFormInvalid = false;
   submittedData: any;
+  profileImage: string | ArrayBuffer | null = null;
 
   constructor(private fb: FormBuilder) {
     this.registrationForm = this.fb.group({
@@ -22,7 +23,8 @@ export class FormComponent {
       mobile_no: ['', [Validators.required, Validators.pattern(/^\+?\d{10,}$/)]],
       email: ['', [Validators.required, Validators.email]],
       qualifications: this.fb.array([this.createQualificationGroup()]),
-      address: ['', Validators.required]
+      address: ['', Validators.required],
+      profileImage: [null] // For profile image
     });
   }
 
@@ -46,6 +48,20 @@ export class FormComponent {
     this.qualifications.removeAt(index);
   }
 
+  onImageChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.profileImage = reader.result;
+        this.registrationForm.patchValue({
+          profileImage: this.profileImage
+        });
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
   onSubmit(): void {
     this.submitted = true;
     if (this.registrationForm.valid) {
@@ -65,6 +81,15 @@ export class FormComponent {
       doc.setFontSize(18);
       doc.text('Resume', 105, y, { align: 'center' });
       y += 10;
+
+      // Add profile image
+      if (this.profileImage) {
+        const imgWidth = 40;
+        const imgHeight = 40;
+        doc.addImage(this.profileImage as string, 'JPEG', 20, y, imgWidth, imgHeight);
+      }
+
+      y += 50;
 
       doc.setFontSize(12);
       doc.text(`Full Name: ${this.submittedData.name}`, 10, y);
