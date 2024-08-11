@@ -1,0 +1,100 @@
+<!-- Show the form if it has not been submitted or if it's invalid -->
+<div *ngIf="!submitted || isFormInvalid" class="border border-dark p-2">
+    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+      <div class="row g-0">
+        <div class="col text-center p-2 mb-3 bg-light">
+          <h3>Registration Form</h3>
+        </div>
+      </div>
+      <div *ngIf="isFormInvalid" class="alert alert-danger">
+        Form is invalid. Please correct the errors and try again.
+      </div>
+      <div class="row">
+        <div class="col mb-3">
+          <label for="name" class="form-label"><b>Full Name</b></label>
+          <input type="text" formControlName="name" class="form-control" id="name" placeholder="John Doe">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mb-3">
+          <label for="mobile_no" class="form-label"><b>Mobile Number</b></label>
+          <input type="tel" formControlName="mobile_no" class="form-control" id="mobile_no" placeholder="+1234567890">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mb-3">
+          <label for="email" class="form-label"><b>Email Address</b></label>
+          <input type="email" formControlName="email" class="form-control" id="email" placeholder="example@example.com">
+        </div>
+      </div>
+      
+      <div formArrayName="qualifications" *ngFor="let qualification of qualifications.controls; let i = index">
+        <div [formGroupName]="i" class="row qualification-row">
+          <div class="col mb-3">
+            <label class="form-label"><b>Qualifications</b></label>
+            <div class="row">
+              <div class="col">
+                <label for="qualification" class="form-label">Education Type</label>
+                <input type="text" formControlName="qualification" class="form-control" placeholder="BSc, MSc, etc.">
+              </div>
+              <div class="col">
+                <label for="passout" class="form-label">Year of Passout</label>
+                <input type="number" formControlName="passout" class="form-control" placeholder="2020">
+              </div>
+              <div class="col">
+                <label for="percentage" class="form-label">Percentage or CGPA</label>
+                <input type="number" formControlName="percentage" class="form-control" placeholder="90">
+              </div>
+              <div class="col-auto">
+                <button type="button" class="btn btn-danger mt-4" (click)="removeQualification(i)">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col mb-3">
+          <button type="button" class="btn btn-primary" (click)="addQualification()">Add More Qualifications</button>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col mb-3">
+          <label for="address" class="form-label"><b>Address</b></label>
+          <input type="text" formControlName="address" class="form-control" id="address" placeholder="Address">
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col mb-3">
+          <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  
+<div *ngIf="submitted && !isFormInvalid" class="border border-dark p-3 w-100%">
+    <div id="resume-content">
+      <h2>Resume</h2>
+      <br><br>
+      <p><strong>Full Name:</strong> {{ submittedData?.name }}</p>
+      <p><strong>Mobile Number:</strong> {{ submittedData?.mobile_no }}</p>
+      <p><strong>Email Address:</strong> {{ submittedData?.email }}</p>
+      <p><strong>Address:</strong> {{ submittedData?.address }}</p>
+  <br>
+      <h4>Qualifications</h4>
+      <div *ngFor="let qualification of submittedData?.qualifications">
+        <p><strong>Education Type:</strong> {{ qualification.qualification }}</p>
+        <p><strong>Year of Passout:</strong> {{ qualification.passout }}</p>
+        <p><strong>Percentage:</strong> {{ qualification.percentage }}%</p>
+        <hr>
+      </div>
+    </div>
+    <br>
+  
+    <button class="btn btn-primary me-2" (click)="printResume()">Print as PDF</button>
+    <button class="btn btn-secondary" (click)="submitted = false; isFormInvalid = false">Edit Information</button>
+  </div>
+  
+  
